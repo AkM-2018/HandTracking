@@ -1,1 +1,3 @@
 supervision
+opencv-python
+mediapipe
