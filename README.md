@@ -25,15 +25,15 @@ Hand Tracking and Segmentation with Mediapipe and SAM2
   $ python main.py [source_video_path] [target_video_path] --use-cpu
 ```
 
-> **flag --use-cpu will force the program to use the cpu. Omit this if you want to use the available resources of your system(like GPU)**
->
-> Checkout the video folder for test.mp4 and processed.mp4
+> flag --use-cpu will force the program to use the cpu. Omit this if you want to use the available resources of your system(like GPU)
 
 ## Example running the script :
 
 ```sh
   $ python main.py test.mp4 processed.mp4 --use-cpu
 ```
+
+> Checkout the video folder for test.mp4 and processed.mp4
 
 ## Example input and output video
 
