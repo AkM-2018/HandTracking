@@ -2,6 +2,10 @@
 
 Hand Tracking and Segmentation with Mediapipe and SAM2
 
+## Working
+
+![design](assets/design.png)
+
 ## Setting up:
 
 - Create a conda virtual environment and activate it.
@@ -37,4 +41,4 @@ Hand Tracking and Segmentation with Mediapipe and SAM2
 
 ## Example input and output video
 
-![video_demo](video/video_demo.gif)
+![video_demo](assets/video_demo.gif)
