@@ -47,7 +47,7 @@ class VideoPredictor:
 
     """
     def init_video_predictor(self):
-        sam2_checkpoint = "../../checkpoints/sam2.1_hiera_large.pt"
+        sam2_checkpoint = "../checkpoints/sam2.1_hiera_large.pt"
         model_cfg = "configs/sam2.1/sam2.1_hiera_l.yaml"
         self.predictor = build_sam2_video_predictor(model_cfg, sam2_checkpoint, device=self.device)
         self.inference_state = self.predictor.init_state(video_path=self.video_dir_path)
@@ -56,7 +56,7 @@ class VideoPredictor:
     """Add hand landmark label points to the predictor
 
     """
-    def add_label_points(self, hand_landmark):
+    def add_label_points(self, hand_landmark, landmark_negative):
         ann_frame_idx = 0
         ann_obj_id = 1
         points = np.array([hand_landmark], dtype=np.float32)

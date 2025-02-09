@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import sys
 import os
 import numpy as np
@@ -13,10 +15,15 @@ from mediapipe.tasks.python import vision
 from sam2.build_sam import build_sam2_video_predictor
 
 from videoprocessor import VideoProcessor
+from utils.imageselector import ImageSelector
 
-if __name__ == "__main__":
-    use_cpu = True if '--use-cpu' in sys.argv else False
+
+if __name__ == '__main__':
+    use_cpu = (True if '--use-cpu' in sys.argv else False)
+    manual_mode = (True if '--manual' in sys.argv else False)
+    
     source_video_path = sys.argv[1]
     target_video_path = sys.argv[2]
-    video_processor = VideoProcessor(source_video_path, target_video_path, use_cpu)
+    video_processor = VideoProcessor(source_video_path, target_video_path, use_cpu, manual_mode)
     video_processor.process()
+
