@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from utils.handtracker import HandTracker
 from utils.videopredictor import VideoPredictor
@@ -12,11 +13,13 @@ class VideoProcessor:
         target_video_path: path of the target video file
         use_cpu: boolean on whether to use cpu or available resources(like cuda) 
     """
-    def __init__(self, source_video_path: str, target_video_path: str, use_cpu: bool, manual_mode: bool):
+    def __init__(self, source_video_path: str, target_video_path: str, param_dict: Dict[str, bool]):
         self.source_video_path = source_video_path
         self.target_video_path = target_video_path
-        self.use_cpu = use_cpu
-        self.manual_mode = manual_mode
+        self.use_cpu = param_dict['use_cpu']
+        self.manual_mode = param_dict['manual_mode']
+        self.check_landmark = param_dict['check_landmark']
+        self.check_segment = param_dict['check_segment']
 
     """Validates source_video_path and target_video_path
 
@@ -50,13 +53,13 @@ class VideoProcessor:
         else:
             self.handTracker = HandTracker(first_image_path)
             self.handTracker.find_hand_landmarks()
-            hand_landmark = self.handTracker.get_wrist_landmark()
+            hand_landmark = self.handTracker.get_wrist_landmark(self.check_landmark)
             landmark_negative = []
 
         print('hand_landmark', hand_landmark)
         print('landmark_negative', landmark_negative)
         
         self.videoPredictor.init_video_predictor()
-        self.videoPredictor.add_label_points(hand_landmark, landmark_negative)
+        self.videoPredictor.add_label_points(hand_landmark, landmark_negative, self.check_segment)
         self.videoPredictor.propogate_in_video(self.target_video_path)
         self.videoPredictor.cleanup()

@@ -19,11 +19,14 @@ from utils.imageselector import ImageSelector
 
 
 if __name__ == '__main__':
-    use_cpu = (True if '--use-cpu' in sys.argv else False)
-    manual_mode = (True if '--manual' in sys.argv else False)
+    param_dict = {}
+    param_dict['use_cpu'] = (True if '--use-cpu' in sys.argv else False)
+    param_dict['manual_mode'] = (True if '--manual' in sys.argv else False)
+    param_dict['check_landmark'] = (True if '--check-landmark' in sys.argv else False)
+    param_dict['check_segment'] = (True if '--check-segment' in sys.argv else False)
     
     source_video_path = sys.argv[1]
     target_video_path = sys.argv[2]
-    video_processor = VideoProcessor(source_video_path, target_video_path, use_cpu, manual_mode)
+    video_processor = VideoProcessor(source_video_path, target_video_path, param_dict)
     video_processor.process()
 

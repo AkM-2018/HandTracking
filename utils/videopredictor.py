@@ -6,12 +6,19 @@ import cv2
 import shutil
 from sam2.build_sam import build_sam2_video_predictor
 
+from .imageutil import ImageUtil
+
 class VideoPredictor:
     """Initialize variables
 
     """
     def __init__(self):
         self.video_dir_path = './vids'
+        colors = ['#FF1493', '#00BFFF', '#FF6347', '#FFD700']
+        self.mask_annotator = sv.MaskAnnotator(
+            color=sv.ColorPalette.from_hex(colors),
+            color_lookup=sv.ColorLookup.TRACK)
+        self.image_util = ImageUtil()
     
     """Initialize the device type to use for processing
 
@@ -53,14 +60,57 @@ class VideoPredictor:
         self.inference_state = self.predictor.init_state(video_path=self.video_dir_path)
         self.predictor.reset_state(self.inference_state)
 
+    """Adds mask to the image
+    """
+    def show_mask(mask, ax, obj_id=None, random_color=False):
+        if random_color:
+            color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
+        else:
+            cmap = plt.get_cmap("tab10")
+            cmap_idx = 0 if obj_id is None else obj_id
+            color = np.array([*cmap(cmap_idx)[:3], 0.6])
+        h, w = mask.shape[-2:]
+        mask_image = mask.reshape(h, w, 1) * color.reshape(1, 1, -1)
+        ax.imshow(mask_image)
+
+    """Shows the segmented image
+
+    """
+    def show_segmented_image(self, mask_logits, object_ids):
+        frames_paths = sorted(sv.list_files_with_extensions(
+            directory=self.video_dir_path, 
+            extensions=["jpg"]))
+
+        frame = cv2.imread(frames_paths[0])
+        masks = (mask_logits > 0.0).cpu().numpy()
+        N, X, H, W = masks.shape
+        masks = masks.reshape(N * X, H, W)
+        detections = sv.Detections(
+            xyxy=sv.mask_to_xyxy(masks=masks),
+            mask=masks,
+            tracker_id=np.array(object_ids)
+        )
+        frame = self.mask_annotator.annotate(frame, detections)
+        self.image_util.show_image(frame)
+
     """Add hand landmark label points to the predictor
 
     """
-    def add_label_points(self, hand_landmark, landmark_negative):
+    def add_label_points(self, hand_landmark, landmark_negative, check_segment: bool):
         ann_frame_idx = 0
         ann_obj_id = 1
+        hand_landmark_label = np.ones(len(hand_landmark), dtype=int)
+
+        if len(landmark_negative) != 0:
+            hand_landmark = np.append(hand_landmark, landmark_negative, axis=0)
+            landmark_negative_label = np.zeros(len(landmark_negative), dtype=int)
+            hand_landmark_label = np.append(hand_landmark_label, landmark_negative_label)
+
+        print("hand_landmark", hand_landmark)
+        print("hand_landmark_label", hand_landmark_label)
+
         points = np.array([hand_landmark], dtype=np.float32)
-        labels = np.array(np.ones(len(hand_landmark), dtype=int), np.int32)
+        labels = np.array([hand_landmark_label], np.int32)
         _, out_obj_ids, out_mask_logits = self.predictor.add_new_points_or_box(
             inference_state=self.inference_state,
             frame_idx=ann_frame_idx,
@@ -68,6 +118,9 @@ class VideoPredictor:
             points=points,
             labels=labels,
         )
+
+        if check_segment == True:
+            self.show_segmented_image(out_mask_logits, out_obj_ids)
 
     """Convert video into image frames and save them in a directory
 
@@ -99,11 +152,6 @@ class VideoPredictor:
         target_video_path: A list of numerical values.
     """
     def propogate_in_video(self, target_video_path: str):
-        colors = ['#FF1493', '#00BFFF', '#FF6347', '#FFD700']
-        mask_annotator = sv.MaskAnnotator(
-            color=sv.ColorPalette.from_hex(colors),
-            color_lookup=sv.ColorLookup.TRACK)
-        
         video_info = sv.VideoInfo.from_video_path(self.source_video_path)
         frames_paths = sorted(sv.list_files_with_extensions(
             directory=self.video_dir_path, 
@@ -120,7 +168,7 @@ class VideoPredictor:
                     mask=masks,
                     tracker_id=np.array(object_ids)
                 )
-                frame = mask_annotator.annotate(frame, detections)
+                frame = self.mask_annotator.annotate(frame, detections)
                 sink.write_frame(frame)
         print(f"saved new video at: {target_video_path}")
     
