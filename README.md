@@ -43,9 +43,11 @@ Hand Tracking and Segmentation with Mediapipe and SAM2
 
 ![video_demo](assets/video_demo.gif)
 
-## Updates
+<hr>
 
-1. Add flag --manual-mode
+# Updates
+
+## Add flag --manual-mode
 ```sh
 $ python main.py [source_video_path] [target_video_path] --manual
 ```
@@ -61,7 +63,15 @@ $ python main.py [source_video_path] [target_video_path] --manual
 
 The green points are positive landmarks and the red ones are negative landmarks.
 
-2. Add flag --check-landmark
+### Examples where manual-mode helps
+1. When image is blur and cant fully detect hands in the image
+
+Without manual-mode
+![hands_auto](assets/hands_auto.PNG)
+With manual-mode
+![hands_manual](assets/hands_manual.PNG)
+
+## Add flag --check-landmark
 ```sh
 $ python main.py [source_video_path] [target_video_path] --check-landmark
 ```
@@ -73,7 +83,7 @@ $ python main.py [source_video_path] [target_video_path] --check-landmark
   3. Keyboard press 'q' to exit the program
   4. Not available for manual mode(since you are yourself selecting the points)
 
-3. Add flag --check-segment
+## Add flag --check-segment
 ```sh
 $ python main.py [source_video_path] [target_video_path] --check-segment
 ```
