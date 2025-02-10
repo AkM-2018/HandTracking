@@ -23,7 +23,9 @@ class ImageSelector:
             print('Error: Unable to load image.')
             return
         self.image_copy = image.copy()
-        cv2.namedWindow('Image')
+        cv2.namedWindow('Image', cv2.WINDOW_NORMAL)
+        height, width = image_util.resize_with_aspect_ratio(image)
+        cv2.resizeWindow('Image', width, height)
         cv2.setMouseCallback('Image', self.mouse_callback)
         while True:
             cv2.imshow('Image', self.image_copy)
