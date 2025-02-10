@@ -61,8 +61,12 @@ class HandTracker:
     """
     def get_wrist_landmark(self, check_landmark: bool) -> NDArray[np.int32]:
         hand_coords = []
-        hand_coords.append(np.array(self.hand_results['left'][0][0]))
-        hand_coords.append(np.array(self.hand_results['right'][0][0]))
+
+        if len(self.hand_results['left']) != 0:
+            hand_coords.append(np.array(self.hand_results['left'][0][0]))
+
+        if len(self.hand_results['right']) != 0:
+            hand_coords.append(np.array(self.hand_results['right'][0][0]))
 
         if check_landmark == True:
             self.show_image(hand_coords)
