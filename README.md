@@ -26,7 +26,7 @@ Hand Tracking and Segmentation with Mediapipe and SAM2
 ## Running the script:
 
 ```sh
-  $ python main.py [source_video_path] [target_video_path] --use-cpu
+  $ python main.py [source_video_path] [target_video_path] --use-cpu --manual --check-landmark --check-segment
 ```
 
 > flag --use-cpu will force the program to use the cpu. Omit this if you want to use the available resources of your system(like GPU)
@@ -42,3 +42,44 @@ Hand Tracking and Segmentation with Mediapipe and SAM2
 ## Example input and output video
 
 ![video_demo](assets/video_demo.gif)
+
+## Updates
+
+1. Add flag --manual-mode
+```sh
+$ python main.py [source_video_path] [target_video_path] --manual
+```
+![manual_node_demo](assets/manual_mode.PNG)
+
+**Details:**
+  1. User can use the manual mode to provide the input points for SAM2 model through GUI. Opens the first frame of the video in a new window
+  2. The user can select positive landmark points using left-mouse-click
+  3. The user can also select negative landmarks using Ctrl + left-mouse-click
+  4. Keyboard press 'o' to submit the points in the image
+  5. Keyboard press 'c' to clear the points in the image
+  6. Keyboard press 'q' to exit the program
+
+The green points are positive landmarks and the red ones are negative landmarks.
+
+2. Add flag --check-landmark
+```sh
+$ python main.py [source_video_path] [target_video_path] --check-landmark
+```
+![check_landmark](assets/check_landmark.PNG)
+
+**Details:**
+  1. Allows the user to check the output of hand-recognization done by Mediapipe on the first frame of the video
+  2. Keyboard press 'o' to continue
+  3. Keyboard press 'q' to exit the program
+  4. Not available for manual mode(since you are yourself selecting the points)
+
+3. Add flag --check-segment
+```sh
+$ python main.py [source_video_path] [target_video_path] --check-segment
+```
+![check_segment_demo](assets/check_segment.PNG)
+
+**Details:**
+  1. Allows the user to check the output of segmentation by SAM2 on the first frame of the video
+  2. Keyboard press 'o' to continue
+  3. Keyboard press 'q' to exit the program
