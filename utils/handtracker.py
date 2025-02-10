@@ -50,7 +50,7 @@ class HandTracker:
         image_copy = image.copy()
         
         for coord in hand_coors:
-            cv2.circle(image_copy, tuple(coord), 5, (255, 0, 0), -1)  # Blue for hand coordinates
+            cv2.circle(image_copy, tuple(coord), 8, (6, 161, 78), -1)  # Green for hand coordinates
         
         self.image_util.show_image(image_copy)
 

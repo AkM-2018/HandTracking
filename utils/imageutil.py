@@ -14,7 +14,7 @@ class ImageUtil:
             key = cv2.waitKey(1) & 0xFF
             if key == ord('o'):  # OK
                 break
-            elif key == ord('c'):  # Return
+            elif key == ord('q'):  # Return
                 raise Exception("Error: Exiting the program...")
         
         cv2.destroyAllWindows()

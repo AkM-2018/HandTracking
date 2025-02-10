@@ -11,10 +11,10 @@ class ImageSelector:
         if event == cv2.EVENT_LBUTTONDOWN:
             if flags & cv2.EVENT_FLAG_CTRLKEY:  # Ctrl + Left Click
                 self.right_clicks.append((x, y))
-                cv2.circle(self.image_copy, (x, y), 5, (0, 0, 255), -1)  # Red for Ctrl + Left Click
+                cv2.circle(self.image_copy, (x, y), 8, (12, 56, 199), -1)  # Red for Ctrl + Left Click
             else:
                 self.left_clicks.append((x, y))
-                cv2.circle(self.image_copy, (x, y), 5, (0, 255, 0), -1)  # Green for Left Click
+                cv2.circle(self.image_copy, (x, y), 8, (6, 161, 78), -1)  # Green for Left Click
         cv2.imshow('Image', self.image_copy)
 
     def open_image_editor(self):
@@ -37,5 +37,7 @@ class ImageSelector:
                 print ('Left Clicks:', np.array(self.left_clicks))
                 print ('Right Clicks:', np.array(self.right_clicks))
                 break
+            elif key == ord('q'):
+                raise Exception("Error: Exiting the program...")
         cv2.destroyAllWindows()
         return np.array(self.left_clicks), np.array(self.right_clicks)
