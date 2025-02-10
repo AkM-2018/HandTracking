@@ -67,9 +67,21 @@ The green points are positive landmarks and the red ones are negative landmarks.
 1. When image is blur and cant fully detect hands in the image
 
 Without manual-mode
+
 ![hands_auto](assets/hands_auto.PNG)
+
 With manual-mode
+
 ![hands_manual](assets/hands_manual.PNG)
+
+
+Without manual-mode
+
+![dance_auto](assets/dance_auto.PNG)
+
+With manual-mode
+
+![dance_manual](assets/dance_manual.PNG)
 
 ## Add flag --check-landmark
 ```sh
